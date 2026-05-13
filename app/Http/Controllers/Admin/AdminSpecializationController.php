@@ -17,7 +17,7 @@ class AdminSpecializationController extends Controller
     public function index()
     {
         $specializations = Specialization::withCount('doctors')->orderBy('name')->paginate(20);
-        $menuItems       = $this->menuItems();
+        $menuItems = $this->menuItems();
 
         return view('admin.specializations', compact('specializations', 'menuItems'));
     }
@@ -25,7 +25,7 @@ class AdminSpecializationController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name'        => 'required|string|max:255|unique:specializations,name',
+            'name' => 'required|string|max:255|unique:specializations,name',
             'description' => 'nullable|string',
         ]);
 
@@ -37,13 +37,15 @@ class AdminSpecializationController extends Controller
     public function update(Request $request, Specialization $specialization)
     {
         $data = $request->validate([
-            'name'        => 'required|string|max:255|unique:specializations,name,' . $specialization->id,
+            'name' => 'required|string|max:255',
             'description' => 'nullable|string',
         ]);
 
         $specialization->update($data);
 
-        return redirect()->route('admin.specializations.index')->with('success', 'Specialization updated.');
+        return redirect()
+            ->route('admin.specializations.index')
+            ->with('success', 'Specialization updated.');
     }
 
     public function destroy(Specialization $specialization)
